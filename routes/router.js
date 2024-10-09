@@ -1,25 +1,29 @@
 const express = require('express');
 const router = express.Router();
-const bodyParser = require('body-parser');
 
 // JWT Middleware import
-const { verifyToken, adminOnly, verifyTokenAdmin } = require('../JWT/jwtConfigue');
-
-// image upload middleware export
-const { handleImageUpload, upload, deleteImage, deleteImages } = require('../imageMiddleware');
+const { verifyToken } = require('../JWT/jwtConfigue');
 
 // Import controllers
-const userController = require('../controller/userController');
-const productController = require('../controller/productController');
-const imageController = require('../controller/imageController');
+const clientController = require('../controller/clientController');
+const adminController = require('../controller/adminController');
 
 // import validators
 const { createUser, getUserByemail, getUserByType, updateUserById, deleteUser } = require('../validation/userValidation')
-
-
 const validate = require('../validationHandler')
 
-// LOGIN Routes admin
-router.get('/admin/OTP', verifyTokenAdmin, adminOnly, adminController.getOTP); // admin create route
-router.post('/admin/create', verifyTokenAdmin, adminOnly, adminController.createAdmin); // admin signup
-router.post('/admin/login', adminController.adminLogin); // admin login route
+// Quotation
+router.post('/quotation/builders', clientController.createQuotationBuildersCleaning);
+router.post('/quotation/window', clientController.createQuotationWindowCleaning);
+router.post('/quotation/carpetsteam', clientController.createQuotationCarpetSteamCleaning);
+router.post('/quotation/commercial', clientController.createQuotationCommercialCleaning);
+router.post('/quotation/house', clientController.createQuotationHouseCleaning);
+router.get('/quotations', verifyToken, clientController.getQuotaions);
+router.get('/quotations/new', verifyToken, clientController.getNewQuotaions);
+router.get('/quotations/accepted', verifyToken, clientController.getAcceptedQuotaions);
+router.get('/quotations/rejected', verifyToken, clientController.getRejectedQuotaions);
+router.put('/quotation/:quotationId', verifyToken, clientController.updateQuotaion);
+
+// admin
+router.post('/admin', adminController.createAdmin);
+router.post('/admin/login', adminController.adminLogin);
