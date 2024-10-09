@@ -12,7 +12,7 @@ const validate = (schema, sources) => (req, res, next) => {
         return res.status(400).json({ error: error.details.map(detail => detail.message) });
     }
 
-    console.log("ok");
+    // console.log("ok");
     // Call next middleware or route handler
     next();
 };
