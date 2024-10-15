@@ -103,7 +103,7 @@ const Quotation = sequelize.define('quotation', {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  isEmailSentToAdmin: {
+  isQuotationEmailSentToAdmin: {
     type: DataTypes.BOOLEAN,
     allowNull: true,
   },

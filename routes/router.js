@@ -8,9 +8,13 @@ const { verifyToken } = require('../JWT/jwtConfigue');
 const clientController = require('../controller/clientController');
 const adminController = require('../controller/adminController');
 
+// payment file import
+const { stripeSessionCreate, updatePaymentState_stripeWEBHOOK } = require('../paymentGateway');
+
 // import validators
-const { createUser, getUserByemail, getUserByType, updateUserById, deleteUser } = require('../validation/userValidation')
-const validate = require('../validationHandler')
+const { createQuotationBuildersCleaning, createQuotationCarpetSteamCleaning, createQuotationCommercialCleaning, createQuotationHouseCleaning, createQuotationWindowCleaning } = require('../validation/quotationValidation')
+const validate = require('../validationHandler');
+
 
 // Quotation
 router.post('/quotation/builders', clientController.createQuotationBuildersCleaning);
@@ -22,8 +26,12 @@ router.get('/quotations', verifyToken, clientController.getQuotaions);
 router.get('/quotations/new', verifyToken, clientController.getNewQuotaions);
 router.get('/quotations/accepted', verifyToken, clientController.getAcceptedQuotaions);
 router.get('/quotations/rejected', verifyToken, clientController.getRejectedQuotaions);
-router.put('/quotation/:quotationId', verifyToken, clientController.updateQuotaion);
+router.put('/quotation/:quotationId', verifyToken, clientController.updateQuotaion , stripeSessionCreate);
+router.post('/webhook', bodyParser.raw({ type: 'application/json' }), updatePaymentState_stripeWEBHOOK); // update order payment
 
 // admin
 router.post('/admin', adminController.createAdmin);
 router.post('/admin/login', adminController.adminLogin);
+
+
+

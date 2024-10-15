@@ -328,18 +328,17 @@ exports.getRejectedQuotaions = async (req, res, next) => {
 exports.updateQuotaion = async (req, res, next) => {
     const quotationId = req.params.quotationId
     try {
-        const quoatation = await Quoatation.findOne({
+        const quotation = await Quoatation.findOne({
             where: {
                 quotationId
             }
         });
 
-        await quoatation.update({
-            // put here what came from admin dashboard
-        })
-
-        if (quoatation) {
-            res.status(200).json(quoatation)
+        if (quotation) {
+            await quotation.update({
+                // put here what came from admin dashboard
+            })
+            next()
         }
 
     } catch (error) {

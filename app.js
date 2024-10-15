@@ -3,7 +3,15 @@ const express = require('express');
 const app = express();
 
 // request allows
-app.use(express.json());
+// Apply JSON parsing Middleware to all non-webhook routes
+app.use((req, res, next) => {
+    if (req.originalUrl.startsWith('/webhook')) {
+        next();
+    } else {
+        bodyParser.json()(req, res, next);
+        app.use(bodyParser.urlencoded({ extended: true }));
+    }
+});
 
 // error handling middleware import
 const errorHandler = require('./errorHandler')

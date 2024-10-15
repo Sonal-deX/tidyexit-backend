@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-exports.sendOrderConfirmation = async (order) => {
+exports.QuotationEmailSentToAdmin = async (order) => {
 
     if (order.dataValues.discountPrice) {
         var discount = order.dataValues.discountPrice
