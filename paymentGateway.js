@@ -6,8 +6,7 @@ exports.stripeSessionCreate = async (req, res, next) => {
     try {
 
         const quotation = await Quotation.findByPk(req.params.quotationId)
-
-
+        
         var price = quotation.dataValues.price
 
         const line_items = [

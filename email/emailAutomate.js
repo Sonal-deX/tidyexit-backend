@@ -1,6 +1,6 @@
 const cron = require('cron')
 const Quotation = require('../model/quotation');
-const { QuotationEmailSentToAdmin } = require('./emailHandler')
+const { QuotationEmailSentToAdmin , QuotationEmailSentToCustomer } = require('./emailHandler')
 
 exports.QuotationEmailSentToAdmin = async () => {
     try {
@@ -35,7 +35,7 @@ exports.QuotationEmailSentToCustomer = async () => {
                     }
                 })
                 quotation.map((item) => {
-                    QuotationEmailSentToAdmin(item)
+                    QuotationEmailSentToCustomer(item)
                 })
             } catch (error) {
                 console.error('Error updating tokens:', error);

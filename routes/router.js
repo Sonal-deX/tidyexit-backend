@@ -15,6 +15,9 @@ const { stripeSessionCreate, updatePaymentState_stripeWEBHOOK } = require('../pa
 const { createQuotationBuildersCleaning, createQuotationCarpetSteamCleaning, createQuotationCommercialCleaning, createQuotationHouseCleaning, createQuotationWindowCleaning } = require('../validation/quotationValidation')
 const validate = require('../validationHandler');
 
+// email handlers add
+const { QuotationEmailSentToCustomer } = require('../email/emailHandler')
+
 
 // Quotation
 router.post('/quotation/builders', clientController.createQuotationBuildersCleaning);
@@ -22,11 +25,11 @@ router.post('/quotation/window', clientController.createQuotationWindowCleaning)
 router.post('/quotation/carpetsteam', clientController.createQuotationCarpetSteamCleaning);
 router.post('/quotation/commercial', clientController.createQuotationCommercialCleaning);
 router.post('/quotation/house', clientController.createQuotationHouseCleaning);
-router.get('/quotations', verifyToken, clientController.getQuotaions);
-router.get('/quotations/new', verifyToken, clientController.getNewQuotaions);
-router.get('/quotations/accepted', verifyToken, clientController.getAcceptedQuotaions);
-router.get('/quotations/rejected', verifyToken, clientController.getRejectedQuotaions);
-router.put('/quotation/:quotationId', verifyToken, clientController.updateQuotaion , stripeSessionCreate);
+router.get('/quotations', clientController.getQuotaions);
+router.get('/quotations/new', clientController.getNewQuotaions);
+router.get('/quotations/accepted', clientController.getAcceptedQuotaions);
+router.get('/quotations/rejected', clientController.getRejectedQuotaions);
+router.put('/quotation/:quotationId', clientController.updateQuotaion, stripeSessionCreate, QuotationEmailSentToCustomer);
 router.post('/webhook', bodyParser.raw({ type: 'application/json' }), updatePaymentState_stripeWEBHOOK); // update order payment
 
 // admin
