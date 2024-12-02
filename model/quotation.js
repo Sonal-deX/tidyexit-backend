@@ -111,6 +111,10 @@ const Quotation = sequelize.define('quotation', {
     type: DataTypes.BOOLEAN,
     allowNull: true,
   },
+  isPaymentConfirmationEmailForQuotationSentToCustomer: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true,
+  },
   price: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: true,

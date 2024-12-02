@@ -1,4 +1,5 @@
-const stripe = require('stripe')("");
+const stripe = require('stripe')("sk_test_51Q66IzBgh2aFvQdvkydGmtCRxF3pD7qVTXBS24OcUGZ6yLVr9P3QKVHpp8IMsauJrrHsTqk0DNEumhDyJ4LOYOk800wBp5PtyD");
+const { PaymentConfirmationEmailForQuotationSentToCustomerHandler } = require('./email/emailHandler');
 const Quotation = require('./model/quotation')
 
 // stripe session create
@@ -37,6 +38,7 @@ exports.stripeSessionCreate = async (req, res, next) => {
         })
 
         req.body.sessionUrl = session.url
+        req.quotation = quotation
         next();
 
     } catch (error) {
@@ -51,7 +53,7 @@ exports.updatePaymentState_stripeWEBHOOK = async (req, res) => {
     let event;
 
     try {
-        event = await stripe.webhooks.constructEvent(payload, sig, process.env.WEBHOOK_KEY);
+        event = await stripe.webhooks.constructEvent(payload, sig, "whsec_qVFUEhNS1TPuy8L9QodSfUNun1CaDQtk");
     } catch (err) {
         console.error('Failed to validate webhook signature:', err);
         res.status(400).send(`Webhook Error: ${err.message}`);
@@ -69,6 +71,7 @@ exports.updatePaymentState_stripeWEBHOOK = async (req, res) => {
                 await quotation.update({
                     paymentStatus: 1
                 })
+                PaymentConfirmationEmailForQuotationSentToCustomerHandler(quotation.dataValues.quotationId);
                 break;
             }
         default:
@@ -79,3 +82,23 @@ exports.updatePaymentState_stripeWEBHOOK = async (req, res) => {
     // Respond to Stripe to acknowledge receipt of the event
     res.status(200).send('Received');
 };
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

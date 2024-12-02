@@ -1,6 +1,6 @@
 const cron = require('cron')
 const Quotation = require('../model/quotation');
-const { QuotationEmailSentToAdmin , QuotationEmailSentToCustomer } = require('./emailHandler')
+const { QuotationEmailSentToAdminHandler , QuotationEmailSentToCustomerHandler } = require('./emailHandler')
 
 exports.QuotationEmailSentToAdmin = async () => {
     try {
@@ -12,7 +12,7 @@ exports.QuotationEmailSentToAdmin = async () => {
                     }
                 })
                 quotation.map((item) => {
-                    QuotationEmailSentToAdmin(item)
+                    QuotationEmailSentToAdminHandler(item)
                 })
             } catch (error) {
                 console.error('Error updating tokens:', error);
@@ -35,7 +35,30 @@ exports.QuotationEmailSentToCustomer = async () => {
                     }
                 })
                 quotation.map((item) => {
-                    QuotationEmailSentToCustomer(item)
+                    QuotationEmailSentToCustomerHandler(item)
+                })
+            } catch (error) {
+                console.error('Error updating tokens:', error);
+            }
+        });
+
+    } catch (error) {
+        console.error('Error updating tokens:', error);
+    }
+}
+
+exports.PaymentConfirmationEmailForQuotationSentToCustomer = async () => {
+    try {
+        cron.schedule('*/10 * * * * ', async () => {
+            try {
+                const quotation = await Quotation.findAll({
+                    where: {
+                        isPaymentConfirmationEmailForQuotationSentToCustomer: 0,
+                        status: 1
+                    }
+                })
+                quotation.map((item) => {
+                    PaymentConfirmationEmailForQuotationSentToCustomerHandler(item)
                 })
             } catch (error) {
                 console.error('Error updating tokens:', error);

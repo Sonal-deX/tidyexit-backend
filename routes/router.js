@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const bodyParser = require('body-parser')
 
 // JWT Middleware import
 const { verifyToken } = require('../JWT/jwtConfigue');
@@ -12,11 +13,11 @@ const adminController = require('../controller/adminController');
 const { stripeSessionCreate, updatePaymentState_stripeWEBHOOK } = require('../paymentGateway');
 
 // import validators
-const { createQuotationBuildersCleaning, createQuotationCarpetSteamCleaning, createQuotationCommercialCleaning, createQuotationHouseCleaning, createQuotationWindowCleaning } = require('../validation/quotationValidation')
+const { createQuotationBuildersCleaning, createQuotationCarpetSteamCleaning, createQuotationCommercialCleaning, createQuotationHouseCleaning, createQuotationWindowCleaning } = require('../validation/quotationValidation');
 const validate = require('../validationHandler');
 
 // email handlers add
-const { QuotationEmailSentToCustomer } = require('../email/emailHandler')
+const { QuotationEmailSentToCustomerHandler } = require('../email/emailHandler');
 
 
 // Quotation
@@ -29,12 +30,12 @@ router.get('/quotations', clientController.getQuotaions);
 router.get('/quotations/new', clientController.getNewQuotaions);
 router.get('/quotations/accepted', clientController.getAcceptedQuotaions);
 router.get('/quotations/rejected', clientController.getRejectedQuotaions);
-router.put('/quotation/:quotationId', clientController.updateQuotaion, stripeSessionCreate, QuotationEmailSentToCustomer);
+// router.put('/quotation/:quotationId', clientController.updateQuotaion, stripeSessionCreate, QuotationEmailSentToCustomerHandler);
+router.put('/quotation/payment/:quotationId', clientController.updateQuotationPaymentStatus, PaymentConfirmationEmailForQuotationSentToCustomerHandler);
 router.post('/webhook', bodyParser.raw({ type: 'application/json' }), updatePaymentState_stripeWEBHOOK); // update order payment
 
 // admin
 router.post('/admin', adminController.createAdmin);
 router.post('/admin/login', adminController.adminLogin);
 
-
-
+module.exports = router

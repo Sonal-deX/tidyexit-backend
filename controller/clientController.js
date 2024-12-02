@@ -21,6 +21,7 @@ exports.createQuotationBuildersCleaning = async (req, res, next) => {
         tellUsMore
     } = req.body;
 
+
     try {
         const newQuoatation = await Quoatation.create({
             selectService,
@@ -40,7 +41,8 @@ exports.createQuotationBuildersCleaning = async (req, res, next) => {
             tellUsMore,
             status: null
         });
-        res.redirect('https://www.youtube.com/watch?v=0CTp1a-aCUM')
+        res.send("khsvsdekdehs")
+        // res.redirect('https://www.youtube.com/watch?v=0CTp1a-aCUM')
 
     } catch (error) {
         next(error)
@@ -345,4 +347,29 @@ exports.updateQuotaion = async (req, res, next) => {
         next(error)
     }
 };
+
+// update quotation payment status by admin
+exports.updateQuotationPaymentStatus = async (req, res, next) => {
+    const quotationId = req.params.quotationId
+    try {
+        const quotation = await Quoatation.findOne({
+            where: {
+                quotationId
+            }
+        });
+
+        if (quotation) {
+            await quotation.update({
+                paymentStatus: 1
+            })
+            next()
+        }
+
+        next(quotationId);
+
+    } catch (error) {
+        next(error)
+    }
+};
+
 
